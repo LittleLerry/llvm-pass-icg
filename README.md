@@ -1,7 +1,7 @@
 # PART2: Runtime Indirect Call Detection
 
 ## Methodology
-
+### Introduction
 We run the target programme and monitor any indirect call during runtime. Before each 
 indirect call, we will insert an instruction and a function call. The first instruction 
 will set a global variable `icf` to `1`, which means that we will run do an indirect 
@@ -20,6 +20,8 @@ use another programme to filter out suitable outputs.
 ### Indirect Call Instrumentation and Monitoring
 
 TBD
+
+
 
 ## Integrated into AFLGO
 
