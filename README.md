@@ -14,8 +14,8 @@ However, the author also doesn't know how to insert extra basic blocks in LLVM P
 has to output all function names with indirect function call flags attached to them. We will 
 use another programme to filter out suitable outputs.
 
-** Above statement will probabily NOT be hold for multi-threaded programmes. And the author 
-** has completely no idea what would happen if the target program were multi-threaded.
+* **Above statement will probabily NOT be hold for multi-threaded programmes. And the author 
+has completely no idea what would happen if the target program were multi-threaded.**
 
 ### Indirect Call Instrumentation and Monitoring
 
