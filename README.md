@@ -1,17 +1,20 @@
-# llvm-pass-skeleton
+# PART2: Runtime Indirect Call Detection
 
-A completely useless LLVM pass.
-It's for LLVM 17.
 
-Build:
 
-    $ cd llvm-pass-skeleton
-    $ mkdir build
-    $ cd build
-    $ cmake ..
-    $ make
-    $ cd ..
+## How to build and test the dylib:
 
-Run:
+```bash
+# bulid the dylib
+cd llvm-pass-icg
+rm -rf build && mkdir build && cd build
+cmake .. && make
+cd ..
+# build test case
+clang -fpass-plugin=`echo build/icg/icgPass.*` main.c -o main
+# create input file
+echo 1 > input.txt
+# indirect call detection
+./main < input.txt | grep "__ICG_STDOUT__:"
+```
 
-    $ clang -fpass-plugin=`echo build/skeleton/SkeletonPass.*` something.c
