@@ -126,9 +126,9 @@ clang -fpass-plugin=`echo build/icg/icgPass.*` main.c -o main -g
 echo 1 > input.txt
 
 # indirect call detection
-./main < input.txt | grep "__ICG_STDOUT__:" | sort | uniq
+./main < input.txt | grep "__ICG_STDOUT__:" | grep ",I:1" | sort | uniq
 ```
 Example output:
 ```bash
-__ICG_STDOUT__:main->function1,I:1
+__ICG_STDOUT__:main->f1,I:1
 ```
