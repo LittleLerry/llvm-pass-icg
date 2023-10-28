@@ -1,29 +1,31 @@
 #include <stdio.h>
 
-void function1() {
-    printf("This is function 1.\n");
+void f1() {
+    printf("f1\n");
 }
 
-void function2() {
-    printf("This is function 2.\n");
+void f2() {
+    printf("f2\n");
+}
+
+void f3(){
+    printf("f3\n");
 }
 
 int main() {
-    void (*funcPtr)();  // Declare a function pointer
+    void (*fp)();
+    int var;
+    scanf("%d", &var);
 
-    int choice;
-    scanf("%d", &choice);
-
-    if (choice == 1) {
-        funcPtr = &function1;  // Assign the address of function1 to funcPtr
-    } else if (choice == 2) {
-        funcPtr = &function2;  // Assign the address of function2 to funcPtr
+    if (var == 1) {
+        fp = &f1;
+    } else if (var == 2) {
+        fp = &f2;
     } else {
-        printf("Invalid choice.\n");
-        return 1;
+        fp = &f3;
     }
-
-    (*funcPtr)();  // Call the function through the function pointer
+    
+    (*funcPtr)();
 
     return 0;
 }
