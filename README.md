@@ -48,7 +48,7 @@ provide any guarantees or insights in that regard.
 
 ## Core logic explaination
 ### Indirect function call instrumentation
-We creates an `IRBuilder`` and sets the insertion point of the `IRBuilder`` to the current call instruction `CI`.
+We creates an `IRBuilder` and sets the insertion point of the `IRBuilder` to the current call instruction `CI`.
 Then we use `CreateStore` to set the value of `icf` to `1`, indicating that the program will use indirect call 
 soon. Finally we insert a function call instruction to print the name of current running function. Please note 
 that passing one argument to `CreateStore()` is not available for LLVM.
@@ -60,17 +60,17 @@ that passing one argument to `CreateStore()` is not available for LLVM.
             Function *calledFunction = CI->getCalledFunction();
             if (!calledFunction) {
                 // IRBuilder init
-			    IRBuilder<> ins_builder(context);
+		IRBuilder<> ins_builder(context);
                 ins_builder.SetInsertPoint(CI);  
 
                 // set to 1
                 ins_builder.CreateStore(ConstantInt::get(Type::getInt32Ty(context), 1), icf);
 
                 // basic print related arguments
-			    Value *formatString = ins_builder.CreateGlobalStringPtr("\n__ICG_STDOUT__:"+functionName+"->");
+		Value *formatString = ins_builder.CreateGlobalStringPtr("\n__ICG_STDOUT__:"+functionName+"->");
 
                 // insert call
-			    ins_builder.CreateCall(printfFunc, {formatString});
+		ins_builder.CreateCall(printfFunc, {formatString});
             }
           }
         }
@@ -87,15 +87,15 @@ And usage of `CreateLoad(icf)` has been depricated, we have to use `CreateLoad(i
 version of LLVM.
 
 ```c++
-    // IRBuilder init
-    Instruction* firstInstruction = BB.getFirstNonPHI();
+	// IRBuilder init
+	Instruction* firstInstruction = BB.getFirstNonPHI();
 	IRBuilder<> print_builder(firstInstruction);
 
-    // basic print related arguments
+	// basic print related arguments
 	Value *functionNameValue = print_builder.CreateGlobalStringPtr(functionName);
 	Value *formatString = print_builder.CreateGlobalStringPtr("%s,I:%d\n");
 
-    // load icf
+	// load icf
 	LoadInst *icfValue = print_builder.CreateLoad(icf->getType(),icf,"icg_val");
 
 	// insert call
