@@ -1,4 +1,6 @@
 # PART2: Runtime Indirect Call Detection
+[Part1: Indirect Call Detection](https://github.com/LittleLerry/llvm-pass-itargets/)
+[PART2: Runtime Indirect Call Detection](https://github.com/LittleLerry/llvm-pass-icg/)
 
 ## What's the final goal?
 
@@ -109,7 +111,7 @@ version of LLVM.
 
 TBD becasue LLVM API changes and we need extra modifications to integration.
 
-## Getting started
+## Build and test llvm-pass-icg
 
 Let's get started:
 
