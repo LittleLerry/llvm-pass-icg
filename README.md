@@ -1,5 +1,5 @@
 # PART2: Runtime Indirect Call Detection
-[Part1: Indirect Call Detection](https://github.com/LittleLerry/llvm-pass-itargets/)
+[PART1: Indirect Call Detection](https://github.com/LittleLerry/llvm-pass-itargets/)
 
 [PART2: Runtime Indirect Call Detection](https://github.com/LittleLerry/llvm-pass-icg/)
 
