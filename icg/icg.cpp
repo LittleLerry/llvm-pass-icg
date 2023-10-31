@@ -94,10 +94,10 @@ struct icgPass : public PassInfoMixin<icgPass> {
 	  for (auto *indirectCallInst : set_flag_worklist) {
 		  IRBuilder<> builder(context);
 		  builder.SetInsertPoint(indirectCallInst);
-		  builder.CreateStore(ConstantInt::get(Type::getInt32Ty(context), 1), icf);
+		  builder.CreateStore(ConstantInt::get(Type::getInt32Ty(context), 0), icf);
 		  
 	      Value *functionNameValue = builder.CreateGlobalStringPtr(functionName);
-	      Value *formatString = builder.CreateGlobalStringPtr("\n__ICG_STDOUT__:%s");
+	      Value *formatString = builder.CreateGlobalStringPtr("\n__ICG_STDOUT__{%s}");
 		  builder.CreateCall(printfFunc, {formatString,functionNameValue});
 	  }
 	   vector<Instruction *> print_worklist;
@@ -116,7 +116,7 @@ struct icgPass : public PassInfoMixin<icgPass> {
 		   LoadInst *icfValue = builder.CreateLoad(icf->getType(),icf,"icg_val");
 		   LoadInst *zeroValue = builder.CreateLoad(zero->getType(),zero,"zero_val");
 		   
-		   Value *icmp = builder.CreateICmpSGT(icfValue, zeroValue, "cmp_val");
+		   Value *icmp = builder.CreateICmpEQ(icfValue, zeroValue, "cmp_val");
 		   
 		   // Value *debugString = builder.CreateGlobalStringPtr("\nDEBUG icmpResult=%d,icf=%d,zero=%d\n");
 		   // builder.CreateCall(printfFunc, {debugString,icmp,icfValue,zeroValue});
@@ -126,9 +126,9 @@ struct icgPass : public PassInfoMixin<icgPass> {
 		   builder.SetInsertPoint(thenInst);
 		   
 		   Value *functionNameValue = builder.CreateGlobalStringPtr(functionName);
-		   Value *formatString = builder.CreateGlobalStringPtr("->%s\n");
+		   Value *formatString = builder.CreateGlobalStringPtr("{%s}\n");
 		   builder.CreateCall(printfFunc, {formatString,functionNameValue,icfValue});
-		   builder.CreateStore(ConstantInt::get(Type::getInt32Ty(context), 0), icf);
+		   builder.CreateStore(ConstantInt::get(Type::getInt32Ty(context), 1), icf);
 		   
 		   builder.SetInsertPoint(firstInst);
 		   
