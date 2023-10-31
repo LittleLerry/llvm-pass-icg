@@ -50,6 +50,7 @@ author has no idea what would happen if the target program were multi-threaded a
 provide any guarantees or insights in that regard.
 
 ## Core logic explaination
+~~
 ### Indirect function call instrumentation
 We creates an `IRBuilder` and sets the insertion point of the `IRBuilder` to the current call instruction `CI`.
 Then we use `CreateStore` to set the value of `icf` to `1`, indicating that the program will use indirect call 
@@ -107,7 +108,7 @@ version of LLVM.
 	// set to 0
 	print_builder.CreateStore(ConstantInt::get(Type::getInt32Ty(context), 0), icf);
 ```
-
+~~
 ## Integrated into AFLGO
 
 TBD becasue LLVM API changes and we need extra modifications to integration.
