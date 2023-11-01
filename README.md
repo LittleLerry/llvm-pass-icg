@@ -36,18 +36,20 @@ powerful tools and APIs to perform instrumentation on programs at the IR level.
 ### Idea illustration
 We run the target program and monitor any indirect calls during runtime. Before each indirect call, 
 we will insert an instruction and a function call. The first instruction will set a global variable 
-`icf` to 1, indicating that an indirect jump will occur. The function call will print the caller 
+`icf` to `0`, indicating that an indirect jump will occur. The function call will print the caller 
 function to STDOUT because the author cannot handle string modification in the LLVM PASS.
 
-For each basic block of Function `F`, we will check the global variable `icf`. If `icf == 1`, we will 
-print the name of the currently running function and then set `icf` to `0` after the check. However, 
-the author doesn't know how to insert extra basic blocks in the LLVM PASS. As a result, we will 
-output all function names with indirect function call flags attached to them. We will use another 
-program to filter out the appropriate outputs.
+For each basic block of Function `F`, we will check the global variable `icf`. If `icf == 0`, we will 
+print the name of the currently running function and then set `icf` to `1` after the check. We will use 
+another program `cg_iterator.py` to filter out the appropriate outputs.
+
+For `cg_iterator.py`, it checks previously generated dot call graph and accepts instrumentation infomation 
+from `STDIN`. The correspondding edges will be added to the graph. Then we output the graph in dot form.
 
 Please note that the above statement will likely NOT hold for multi-threaded programs. The 
 author has no idea what would happen if the target program were multi-threaded and cannot 
-provide any guarantees or insights in that regard.
+provide any guarantees or insights in that regard. And for `cg_iterator.py`, optimization MUST be applied 
+otherwise we cannot terminate the whole loop in proper time.
 
 ## Core logic explaination
 <del>
@@ -109,30 +111,67 @@ version of LLVM.
 	print_builder.CreateStore(ConstantInt::get(Type::getInt32Ty(context), 0), icf);
 ```
 </del>
+
 ## Integrated into AFLGO
 
 TBD becasue LLVM API changes and we need extra modifications to integration.
 
-## Build and test llvm-pass-icg
+## Build and test
 
-Let's get started:
+### Build dynamic lib
 
 ```bash
 # clone the lib and bulid the dylib
 git clone https://github.com/LittleLerry/llvm-pass-icg.git
 cd llvm-pass-icg && mkdir build && cd build
 cmake .. && make && cd ..
+```
+The dynamic lib should be here: `build/icg/icgPass.*`.
 
+### Build the test programe
+```bash
 # build test program
-clang -fpass-plugin=`echo build/icg/icgPass.*` main.c -o main -g
+# your clang version should be AT LEAST 17
+clang -fpass-plugin=`echo build/icg/icgPass.*` main.c -o main
+```
+`main.c` is the test cases, you may read the source code to understand that how it works. 
+The output file `main` carries the added instructions in `icgPass.*`.
 
-# create input file
+
+### Test the test programe
+```bash
 echo 1 > input.txt
-
-# indirect call detection
 ./main < input.txt | grep "__ICG_STDOUT__"
 ```
 Example output:
 ```bash
 __ICG_STDOUT__{main}{f1}
 ```
+
+### Iteration loop testing
+Please note that you should satisfy following clang & opt requirements:
+```bash
+# clang version >= 17, please check via
+clang --version 
+# opt version >= 17, please check via
+opt --version
+# dot exists, please check via
+dot --version
+```
+And you need to install those modules for `python3`:
+```bash
+pip3 install pydot
+pip3 install networkx
+```
+Then you may run the main loop script using
+```bash
+chmod +x ./start_iteration.sh
+./start_iteration.sh
+```
+The iteration will ends after we test `main` for 10 times. You may find before_iteration.png 
+and after_iteration.png under current working folder.
+
+Example before_iteration.png
+<img src="before_iteration.png"/>
+Example after_iteration.png
+<img src="after_iteration.png"/>
