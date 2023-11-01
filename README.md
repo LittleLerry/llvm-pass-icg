@@ -171,7 +171,10 @@ chmod +x ./start_iteration.sh
 The iteration will ends after we test `main` for 10 times. You may find before_iteration.png 
 and after_iteration.png under current working folder.
 
+
 Example before_iteration.png
 <img src="before_iteration.png"/>
+
+
 Example after_iteration.png
 <img src="after_iteration.png"/>
