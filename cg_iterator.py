@@ -34,7 +34,7 @@ def main():
             caller = "{"+ match.group(1) +"}"
             callee = "{"+ match.group(2) +"}"
             if caller == callee:
-                print("WARN/Give up processing if caller equals to callee: " + line)
+                print("INFO/Give up processing if caller equals to callee: " + line)
             else:
                 if (caller,callee in label_node.keys()):
                     node_caller = label_node[caller]
@@ -44,7 +44,7 @@ def main():
                     print("WARN/Cannot find caller or callee: " + line)
                 
         else:
-            print("WARN/Bad __ICG_STDOUT__ for line: " + line)
+            print("INFO/Bad __ICG_STDOUT__ for line: " + line)
     
     #write_G_to_new_dot
     nx.nx_pydot.write_dot(G,og)
