@@ -134,7 +134,7 @@ The dynamic lib should be here: `build/icg/icgPass.*`.
 # your clang version should be AT LEAST 17
 clang -fpass-plugin=`echo build/icg/icgPass.*` main.c -o main
 ```
-`main.c` is the test cases, you may read the source code to understand that how it works. 
+`main.c` accepts test cases, you may read the source code to understand that how it works. 
 The output file `main` carries the added instructions in `icgPass.*`.
 
 
